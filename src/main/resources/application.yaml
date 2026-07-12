@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: web
+  datasource:
+    url: jdbc:h2:mem:aiadventchallenge;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+ai:
+  chat:
+    base-url: http://localhost:1234/v1/
+    base-model: qwen/qwen3-14b

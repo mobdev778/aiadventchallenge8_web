@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${chat.name} + ' — Киновед'">Чат — Киновед</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-primary: #07111f;
+            --bg-secondary: #0d1b2f;
+            --panel: rgba(16, 28, 48, 0.72);
+            --panel-border: rgba(130, 180, 255, 0.18);
+            --text-primary: #f4f8ff;
+            --text-secondary: #9fb0cf;
+            --accent: #5ee7ff;
+            --accent-strong: #7c5cff;
+            --user-bubble: rgba(94, 231, 255, 0.14);
+            --bot-bubble: rgba(124, 92, 255, 0.16);
+            --shadow: 0 0 30px rgba(94, 231, 255, 0.14);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Inter", "Segoe UI", sans-serif;
+            color: var(--text-primary);
+            background:
+                radial-gradient(circle at top left, rgba(124, 92, 255, 0.18), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(94, 231, 255, 0.14), transparent 28%),
+                linear-gradient(145deg, var(--bg-primary), var(--bg-secondary));
+            padding: 32px 20px;
+        }
+
+        .layout {
+            width: min(100%, 980px);
+            margin: 0 auto;
+            display: grid;
+            gap: 24px;
+        }
+
+        .panel {
+            border: 1px solid var(--panel-border);
+            border-radius: 28px;
+            background: linear-gradient(180deg, rgba(20, 34, 58, 0.72), rgba(10, 18, 33, 0.62));
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 24px 80px rgba(0, 0, 0, 0.35),
+                var(--shadow);
+        }
+
+        .chat-header {
+            padding: 28px 32px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .chat-title {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 3rem);
+            text-shadow: 0 0 18px rgba(94, 231, 255, 0.22);
+        }
+
+        .messages {
+            padding: 0 24px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            max-width: min(100%, 720px);
+            padding: 18px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(130, 180, 255, 0.14);
+            background: rgba(8, 16, 30, 0.72);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .message.user {
+            align-self: flex-start;
+            background: linear-gradient(135deg, var(--user-bubble), rgba(94, 231, 255, 0.08));
+            border-color: rgba(94, 231, 255, 0.22);
+        }
+
+        .message.bot {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--bot-bubble), rgba(124, 92, 255, 0.08));
+            border-color: rgba(124, 92, 255, 0.24);
+        }
+
+        .message-type {
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .message-text {
+            margin: 0;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .message-time {
+            margin-top: 12px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .status-banner {
+            margin: 0 24px 24px;
+            padding: 14px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(94, 231, 255, 0.18);
+            background: rgba(94, 231, 255, 0.08);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .empty-state {
+            padding: 24px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .reply-form {
+            display: flex;
+            gap: 12px;
+            margin: 0 24px 24px;
+            padding: 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(94, 231, 255, 0.18);
+            background: rgba(8, 16, 30, 0.72);
+        }
+
+        .reply-input {
+            flex: 1;
+            min-width: 0;
+            padding: 14px 16px;
+            border: 1px solid rgba(130, 180, 255, 0.18);
+            border-radius: 14px;
+            background: rgba(7, 17, 31, 0.95);
+            color: var(--text-primary);
+            font: inherit;
+        }
+
+        .reply-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .reply-input:focus {
+            outline: none;
+            border-color: rgba(94, 231, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(94, 231, 255, 0.12);
+        }
+
+        .reply-button {
+            flex: 0 0 auto;
+            padding: 0 22px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+            color: #04101d;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .reply-button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reply-button:not(:disabled):hover {
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 640px) {
+            .chat-header {
+                padding: 24px 20px;
+            }
+
+            .messages {
+                padding: 0 16px 16px;
+            }
+
+            .status-banner {
+                margin: 0 16px 16px;
+            }
+
+            .message {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <section class="panel chat-header">
+        <a class="back-link" href="/">← На стартовую</a>
+        <h1 class="chat-title" th:text="${chat.name}">Новый чат</h1>
+    </section>
+
+    <section class="panel">
+        <div class="status-banner" id="chat-status">Ожидание обновлений чата…</div>
+        <div class="messages" th:if="${!messages.isEmpty()}">
+            <article
+                    class="message"
+                    th:each="message : ${messages}"
+                    th:classappend="${message.type.name() == 'User'} ? ' user' : ' bot'"
+            >
+                <div class="message-type" th:text="${message.type}">User</div>
+                <p class="message-text" th:text="${message.text}">Текст сообщения</p>
+                <div class="message-time" th:text="${#temporals.format(T(java.time.Instant).ofEpochMilli(message.time).atZone(T(java.time.ZoneId).systemDefault()).toLocalDateTime(), 'dd.MM.yyyy HH:mm')}">
+                    12.07.2026 13:00
+                </div>
+            </article>
+        </div>
+        <div class="empty-state" th:if="${messages.isEmpty()}">
+            В этом чате пока нет сообщений.
+        </div>
+        <form class="reply-form" th:if="${showReplyForm}" th:action="@{/chats/{chatId}/messages(chatId=${chat.id})}" method="post">
+            <input type="hidden" name="lastMessageId" th:value="${lastBotMessageId}">
+            <textarea
+                    id="reply-input"
+                    class="reply-input"
+                    name="userMessage"
+                    placeholder="Сообщение для Киноведа"
+                    rows="3"
+            ></textarea>
+            <button id="reply-button" class="reply-button" type="submit" disabled>Отправить</button>
+        </form>
+    </section>
+</div>
+<script th:inline="javascript">
+    const chatId = /*[[${chat.id}]]*/ '';
+    const showReplyForm = /*[[${showReplyForm}]]*/ false;
+    const statusBanner = document.getElementById('chat-status');
+    const eventSource = new EventSource(`/chats/${chatId}/events`);
+
+    eventSource.addEventListener('connected', () => {
+        statusBanner.textContent = 'Подключено к обновлениям чата.';
+    });
+
+    eventSource.addEventListener('chat-updated', () => {
+        statusBanner.textContent = 'Чат обновился, выполняется перезагрузка…';
+        window.location.reload();
+    });
+
+    eventSource.addEventListener('assistant-thinking', () => {
+        statusBanner.textContent = 'Киновед начал размышлять над ответом…';
+    });
+
+    eventSource.addEventListener('assistant-ready', () => {
+        statusBanner.textContent = 'Киновед завершил размышление и готовит ответ…';
+    });
+
+    if (showReplyForm) {
+        const replyInput = document.getElementById('reply-input');
+        const replyButton = document.getElementById('reply-button');
+        const updateReplyButtonState = () => {
+            replyButton.disabled = !/\p{L}/u.test(replyInput.value.trim());
+        };
+
+        replyInput.addEventListener('input', updateReplyButtonState);
+        updateReplyButtonState();
+    }
+
+    eventSource.onerror = () => {
+        statusBanner.textContent = 'Соединение с обновлениями потеряно. Выполняется переподключение…';
+    };
+
+    window.addEventListener('beforeunload', () => {
+        eventSource.close();
+    });
+</script>
+</body>
+</html>
