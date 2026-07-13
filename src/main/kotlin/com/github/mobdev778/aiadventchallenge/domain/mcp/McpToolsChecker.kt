@@ -11,19 +11,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Component
 
-fun main() {
-    // Проверка ответа "tools" для Qdrant:
-    runBlocking {
-        val tools = McpToolsChecker().loadTools("http://localhost:8000/sse")
-        tools.forEach {
-            println("name: ${it.name}")
-            println("title: ${it.title}")
-            println("description: ${it.description}")
-            println("inputSchema: ${it.inputSchema}")
-        }
-    }
-}
-
 @Component
 class McpToolsChecker {
 
