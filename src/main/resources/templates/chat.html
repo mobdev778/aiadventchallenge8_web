@@ -243,7 +243,7 @@
                     id="reply-input"
                     class="reply-input"
                     name="userMessage"
-                    placeholder="Сообщение для Киноведа"
+                    placeholder="Сообщение для агента"
                     rows="3"
             ></textarea>
             <button id="reply-button" class="reply-button" type="submit" disabled>Отправить</button>
@@ -282,6 +282,15 @@
 
         replyInput.addEventListener('input', updateReplyButtonState);
         updateReplyButtonState();
+
+        replyInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey && !event.ctrlKey && !event.metaKey) {
+                event.preventDefault();
+                if (!replyButton.disabled) {
+                    replyInput.form.submit();
+                }
+            }
+        });
     }
 
     eventSource.onerror = () => {

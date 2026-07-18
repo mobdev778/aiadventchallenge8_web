@@ -22,12 +22,19 @@ repositories {
 }
 
 dependencies {
+    implementation("io.ktor:ktor-server-netty-jvm:3.4.3")
+    implementation("io.modelcontextprotocol:kotlin-sdk-server-jvm:0.14.0")
+    implementation("io.ktor:ktor-server-content-negotiation-jvm:3.4.3")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:3.4.3")
+
     implementation("io.modelcontextprotocol:kotlin-sdk-client-jvm:0.14.0")
+
     implementation("io.ktor:ktor-client-core-jvm:3.4.3")
     implementation("io.ktor:ktor-client-cio-jvm:3.4.3")
     implementation("io.projectreactor:reactor-core")
     implementation("org.reactivestreams:reactive-streams:1.0.4")
     implementation("com.squareup.okhttp3:okhttp:5.1.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.1.0")
     implementation("com.squareup.retrofit2:converter-kotlinx-serialization:3.0.0")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("org.springframework.boot:spring-boot-h2console")
@@ -35,8 +42,23 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core") {
+        version { strictly("1.11.0") }
+    }
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm") {
+        version { strictly("1.11.0") }
+    }
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor") {
+        version { strictly("1.11.0") }
+    }
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j") {
+        version { strictly("1.11.0") }
+    }
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive") {
+        version { strictly("1.11.0") }
+    }
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("tools.jackson.module:jackson-module-kotlin")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -65,3 +87,4 @@ allOpen {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+

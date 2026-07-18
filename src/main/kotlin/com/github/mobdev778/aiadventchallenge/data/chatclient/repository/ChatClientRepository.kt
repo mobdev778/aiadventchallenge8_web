@@ -18,6 +18,7 @@ class ChatClientRepository(
     suspend fun sendRequest(
         request: ChatRequest,
     ): ChatResponse {
+        println("ChatClientRepository.sendRequest")
         return withContext(Dispatchers.IO) {
             val restApi: ChatRestApi = retrofit.create(ChatRestApi::class.java)
             val requestDto = requestMapper.map(request)

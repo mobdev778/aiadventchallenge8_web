@@ -154,14 +154,14 @@ class ChatService(
     }
 }
 
-private fun Chat.toEntity(): ChatEntity = ChatEntity(
+fun Chat.toEntity(): ChatEntity = ChatEntity(
     id = id,
     name = name,
     time = time,
     parentId = parentId,
 )
 
-private fun ChatEntity.toModel(): Chat = Chat(
+fun ChatEntity.toModel(): Chat = Chat(
     id = id,
     name = name,
     time = time,

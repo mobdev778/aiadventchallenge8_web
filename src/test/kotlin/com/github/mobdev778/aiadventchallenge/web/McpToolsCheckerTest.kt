@@ -4,21 +4,16 @@ import com.github.mobdev778.aiadventchallenge.domain.mcp.McpToolsChecker
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Ignore
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
-@Ignore
+// @Ignore
 class McpToolsCheckerTest {
 
     @Test
-    fun testQdrant() {
+    fun testQdrant() = runBlocking {
         // Проверка ответа "tools" для Qdrant:
-        runBlocking {
-            val tools = McpToolsChecker().loadTools("http://localhost:8000/sse")
-            tools.forEach {
-                println("name: ${it.name}")
-                println("title: ${it.title}")
-                println("description: ${it.description}")
-                println("inputSchema: ${it.inputSchema}")
-            }
-        }
+        val tools = McpToolsChecker().loadTools("http://localhost:8000/sse")
+        val find = tools.firstOrNull { it.name == "qdrant-find" }
+        assertEquals("qdrant-find", find?.name)
     }
 }

@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,11 +28,16 @@ class ChatClientConfig(
 
     @Bean
     fun okHttpClient(): OkHttpClient {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
         return OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.MINUTES)
             .readTimeout(5, TimeUnit.MINUTES)
             .writeTimeout(5, TimeUnit.MINUTES)
             .callTimeout(5, TimeUnit.MINUTES)
+            .addNetworkInterceptor(loggingInterceptor)
             .build()
     }
 

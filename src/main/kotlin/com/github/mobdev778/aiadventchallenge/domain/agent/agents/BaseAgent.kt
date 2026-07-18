@@ -28,7 +28,7 @@ abstract class BaseAgent(
     override suspend fun handle(
         context: AgentContext,
         request: AgentRequest
-    ): AgentResponse {
+    ): AgentResponse? {
         val systemPrompt = SystemPromptBuilder()
             .chatId(request.chatId)
             .profile(context.profile)     // Долговременная память
@@ -47,11 +47,24 @@ abstract class BaseAgent(
         systemPrompt: String,
         request: AgentRequest,
     ): AgentResponse {
+        println("!!! BaseAgent.sendMessage. request: ${request.query}")
+
         val userMessage = buildUserMessage(request)
-        val currentMessages = buildCurrentMessages(context, systemPrompt, userMessage)
+
+        println("!!! BaseAgent.sendMessage. [1]")
+
+        val currentMessages = try {
+            buildCurrentMessages(context, systemPrompt, userMessage)
+        } catch (e: Exception) {
+            ArrayList()
+        }
+
+        println("!!! BaseAgent.sendMessage. [2]")
 
         val (finalAnswer, totalPromptTokens, totalCompletionTokens) =
             executeAgentLoop(context, currentMessages)
+
+        println("!!! BaseAgent.sendMessage. [3]")
 
         val responseMessage = ChatMessage(
             id = UUID.randomUUID(),
@@ -62,6 +75,8 @@ abstract class BaseAgent(
             type = MessageType.Bot,
             tokens = totalCompletionTokens,
         )
+
+        println("!!! BaseAgent.sendMessage. [4]")
 
         return AgentResponse(
             agent = this.toString(),
@@ -115,6 +130,8 @@ abstract class BaseAgent(
         context: AgentContext,
         currentMessages: ArrayList<Message>,
     ): Triple<String, Int, Int> {
+        println("!!! executeAgentLoop()")
+
         var totalPromptTokens = 0
         var totalCompletionTokens = 0
         var finalAnswer = "- no response -"
@@ -125,15 +142,16 @@ abstract class BaseAgent(
             while (shouldContinue && maxIterations > 0) {
                 maxIterations--
 
-                val response = chatClientRepository.sendRequest(
-                    ChatRequest(
-                        model = baseModel,
-                        messages = currentMessages,
-                        tools = context.tools,
-                        maxTokens = 4096,  // ограничиваем число токенов для локальной LLM
-                        temperature = 0.4, // снижаем температуру, чтобы улучшить качество поиска
-                    ),
+                val request = ChatRequest(
+                    model = baseModel,
+                    messages = currentMessages,
+                    tools = context.tools,
+                    temperature = 0.4, // снижаем температуру, чтобы улучшить качество поиска
                 )
+                println("!!! request: $request")
+
+                val response = chatClientRepository.sendRequest(request)
+                println("!!! response: ${response.choices.firstOrNull()?.message?.content}")
 
                 totalPromptTokens += response.usage?.promptTokens ?: 0
                 totalCompletionTokens += response.usage?.completionTokens ?: 0

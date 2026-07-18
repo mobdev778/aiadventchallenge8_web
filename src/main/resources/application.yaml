@@ -21,4 +21,8 @@ spring:
 ai:
   chat:
     base-url: http://localhost:1234/v1/
-    base-model: qwen/qwen3-14b
+    base-model: qwen/qwen3-1.7b
+
+git:
+  project:
+    directory: ${GIT_PROJECT_DIRECTORY}

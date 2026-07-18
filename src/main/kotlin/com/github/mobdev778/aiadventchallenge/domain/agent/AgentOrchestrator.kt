@@ -1,16 +1,13 @@
 package com.github.mobdev778.aiadventchallenge.domain.agent
 
 import com.github.mobdev778.aiadventchallenge.data.chatclient.repository.ChatClientRepository
-import com.github.mobdev778.aiadventchallenge.data.mcp.McpServerRepository
 import com.github.mobdev778.aiadventchallenge.domain.agent.agents.Agent
-import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentContext
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentRequest
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentResponse
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentType
 import com.github.mobdev778.aiadventchallenge.domain.agent.pool.AgentContextBuilder
 import com.github.mobdev778.aiadventchallenge.domain.agent.pool.AgentPool
 import com.github.mobdev778.aiadventchallenge.domain.chat.persistence.ChatMessageRepository
-import com.github.mobdev778.aiadventchallenge.domain.mcp.CachedMcpToolsChecker
 import com.github.mobdev778.aiadventchallenge.domain.mcp.McpServerInteractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,7 +67,7 @@ class AgentOrchestrator(
         scope.launch {
             println("Оркестратору поступил запрос: ${request.query}")
             val context = agentContextBuilder.build(request)
-            val agentType = getAgentType(context)
+            val agentType = getAgentType(request.query)
             println("Определен тип агента: $agentType")
             val pool = pools[agentType] ?: throw IllegalArgumentException("Unknown agent type")
             println("Выбран пул агентов: $pool")
@@ -96,8 +93,11 @@ class AgentOrchestrator(
         }
     }
 
-    private fun getAgentType(context: AgentContext): AgentType {
-        // в нашей задаче только 1 тип агента
-        return AgentType.ChatAssistant
+    private fun getAgentType(query: String): AgentType {
+        return when {
+            query.startsWith("/codereview") -> AgentType.CodeReview
+            query.startsWith("/help") -> AgentType.Help
+            else -> AgentType.ChatAssistant
+        }
     }
 }

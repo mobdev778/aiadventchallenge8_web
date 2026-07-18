@@ -1,4 +1,4 @@
-package com.github.mobdev778.aiadventchallenge.web.controller
+package com.github.mobdev778.aiadventchallenge.web.controller.home
 
 import com.github.mobdev778.aiadventchallenge.domain.chat.model.MessageType
 import com.github.mobdev778.aiadventchallenge.domain.chat.service.ChatService

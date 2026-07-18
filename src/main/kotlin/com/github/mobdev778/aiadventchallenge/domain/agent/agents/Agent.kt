@@ -10,8 +10,8 @@ abstract class Agent(
 
     abstract suspend fun handle(
         context: AgentContext,
-        request: AgentRequest
-    ): AgentResponse
+        request: AgentRequest,
+    ): AgentResponse?
 
     override fun toString(): String {
         return "[$id] ${this.javaClass.simpleName}"

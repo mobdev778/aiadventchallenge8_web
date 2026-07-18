@@ -17,7 +17,7 @@ class ChatAssistantAgent(
     id, chatClientRepository, mcpServerInteractor, coroutineScope, baseModel,
 ) {
 
-    override suspend fun handle(context: AgentContext, request: AgentRequest): AgentResponse {
+    override suspend fun handle(context: AgentContext, request: AgentRequest): AgentResponse? {
         return super.handle(context, request)
     }
 }

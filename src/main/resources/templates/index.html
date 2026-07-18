@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Киновед</title>
+    <title>AI-агент для проекта AIAdventChallenge8</title>
     <style>
         :root {
             color-scheme: dark;
@@ -93,7 +93,7 @@
             pointer-events: none;
         }
 
-        h1 {
+        h3 {
             margin: 0 0 20px;
             font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 800;
@@ -109,6 +109,7 @@
             max-width: 620px;
             font-size: 1.08rem;
             line-height: 1.75;
+            align-content: flex-start;
             color: var(--text-secondary);
         }
 
@@ -196,18 +197,20 @@
 </head>
 <body>
 <section class="hero">
-    <h1>Киновед</h1>
+    <h3>AI-агент</h3>
     <p class="subtitle">
-        Привет! Я - киновед, могу напомнить детали из твоего любимого научно-фантастического фильма
-        ("Матрица", "Звездные войны"). Введи ниже, что именно ты хочешь узнать и я подскажу.
+        Привет! Задай вопрос по проекту - и я попробую ответить!<br>
+        Есть также дополнительные команды:<br>
+        <b>/help [вопрос]</b> - получить справку по проекту<br>
+        <b>/codereview [хеш коммита]</b> - выполнить код-ревью с помощью имеющихся инструментов<br>
     </p>
     <form class="question-form" method="post" action="/chats">
         <input
                 class="question-input"
                 type="text"
                 name="question"
-                placeholder="Пример: Что Нео и мальчик говорили про ложку в фильме Матрица?"
-                aria-label="Поле для вопроса о фильме"
+                placeholder="Пример: /help есть ли в текущей ветке незакомиченные изменения?"
+                aria-label="Поле для вопроса о проекте"
                 required
         >
         <button class="question-button" type="submit">Задать вопрос</button>

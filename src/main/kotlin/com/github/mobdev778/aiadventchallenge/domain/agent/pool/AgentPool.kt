@@ -41,7 +41,9 @@ class AgentPool<A : Agent>(
                         val (context, request) = queue.dequeue() // Берут задачу по очереди (кто первый успел)
                         println("Агенту: $agent пришло новое сообщение: ${request.query}")
                         val response = agent.handle(context, request)
-                        onResponseReady(response)
+                        if (response != null) {
+                            onResponseReady(response)
+                        }
                     }
                 } catch (e: CancellationException) {
                     throw e
