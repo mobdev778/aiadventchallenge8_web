@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 
-@Ignore
+// @Ignore
 class CodeReviewRemoteControllerTest {
 
     @Serializable

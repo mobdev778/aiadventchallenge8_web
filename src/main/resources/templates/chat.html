@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${chat.name} + ' — Киновед'">Чат — Киновед</title>
+    <title th:text="${chat.name} + ' — Чат'">CRM помощник. Чат</title>
     <style>
         :root {
             color-scheme: dark;
@@ -266,11 +266,11 @@
     });
 
     eventSource.addEventListener('assistant-thinking', () => {
-        statusBanner.textContent = 'Киновед начал размышлять над ответом…';
+        statusBanner.textContent = 'Агент начал размышлять над ответом…';
     });
 
     eventSource.addEventListener('assistant-ready', () => {
-        statusBanner.textContent = 'Киновед завершил размышление и готовит ответ…';
+        statusBanner.textContent = 'Агент завершил размышление и готовит ответ…';
     });
 
     if (showReplyForm) {
@@ -294,7 +294,7 @@
     }
 
     eventSource.onerror = () => {
-        statusBanner.textContent = 'Соединение с обновлениями потеряно. Выполняется переподключение…';
+        statusBanner.textContent = 'Соединение с чатом потеряно. Выполняется переподключение…';
     };
 
     window.addEventListener('beforeunload', () => {

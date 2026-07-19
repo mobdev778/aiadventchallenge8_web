@@ -1,5 +1,6 @@
 package com.github.mobdev778.aiadventchallenge.domain.agent.pool
 
+import com.github.mobdev778.aiadventchallenge.domain.agent.AgentOrchestrator
 import com.github.mobdev778.aiadventchallenge.domain.agent.agents.Agent
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentContext
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentRequest
@@ -29,7 +30,7 @@ class AgentPool<A : Agent>(
         queue.enqueue(context, request)
     }
 
-    fun start(scope: CoroutineScope) {
+    fun start(agentOrchestrator: AgentOrchestrator, scope: CoroutineScope) {
         if (activeJobs.isNotEmpty()) {
             return
         }
@@ -40,7 +41,7 @@ class AgentPool<A : Agent>(
                     while (isActive) {
                         val (context, request) = queue.dequeue() // Берут задачу по очереди (кто первый успел)
                         println("Агенту: $agent пришло новое сообщение: ${request.query}")
-                        val response = agent.handle(context, request)
+                        val response = agent.handle(agentOrchestrator, context, request)
                         if (response != null) {
                             onResponseReady(response)
                         }

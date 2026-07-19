@@ -1,6 +1,7 @@
 package com.github.mobdev778.aiadventchallenge.domain.agent.agents
 
 import com.github.mobdev778.aiadventchallenge.data.chatclient.repository.ChatClientRepository
+import com.github.mobdev778.aiadventchallenge.domain.agent.AgentOrchestrator
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentContext
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentRequest
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentResponse
@@ -17,7 +18,11 @@ class ChatAssistantAgent(
     id, chatClientRepository, mcpServerInteractor, coroutineScope, baseModel,
 ) {
 
-    override suspend fun handle(context: AgentContext, request: AgentRequest): AgentResponse? {
-        return super.handle(context, request)
+    override suspend fun handle(
+        agentOrchestrator: AgentOrchestrator,
+        context: AgentContext,
+        request: AgentRequest
+    ): AgentResponse? {
+        return super.handle(agentOrchestrator, context, request)
     }
 }

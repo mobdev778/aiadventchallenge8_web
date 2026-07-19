@@ -5,6 +5,8 @@ import com.github.mobdev778.aiadventchallenge.domain.agent.agents.Agent
 import com.github.mobdev778.aiadventchallenge.domain.agent.agents.ChatAssistantAgent
 import com.github.mobdev778.aiadventchallenge.domain.agent.agents.CodeReviewAgent
 import com.github.mobdev778.aiadventchallenge.domain.agent.agents.HelpAgent
+import com.github.mobdev778.aiadventchallenge.domain.agent.agents.crm.CrmChatAgent
+import com.github.mobdev778.aiadventchallenge.domain.agent.agents.crm.CrmStartAgent
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentType
 import com.github.mobdev778.aiadventchallenge.domain.mcp.McpServerInteractor
 import kotlinx.coroutines.CoroutineScope
@@ -32,6 +34,17 @@ class AgentFactory(
             }
             AgentType.CodeReview -> {
                 CodeReviewAgent(
+                    id, chatClientRepository, mcpServerInteractor, coroutineScope, baseModel,
+                )
+            }
+
+            AgentType.CrmStart -> {
+                CrmStartAgent(
+                    id, chatClientRepository, mcpServerInteractor, coroutineScope, baseModel,
+                )
+            }
+            AgentType.CrmChat -> {
+                CrmChatAgent(
                     id, chatClientRepository, mcpServerInteractor, coroutineScope, baseModel,
                 )
             }

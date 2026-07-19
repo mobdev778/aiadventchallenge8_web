@@ -1,6 +1,7 @@
 package com.github.mobdev778.aiadventchallenge.domain.mymcp
 
 import com.github.mobdev778.aiadventchallenge.domain.mcp.model.McpServer
+import com.github.mobdev778.aiadventchallenge.domain.mymcp.crm.MyMcpCrmServer
 import com.github.mobdev778.aiadventchallenge.domain.mymcp.file.MyMcpFileServer
 import com.github.mobdev778.aiadventchallenge.domain.mymcp.git.MyMcpGitServer
 import com.github.mobdev778.aiadventchallenge.domain.mymcp.model.MyMcpServerState
@@ -15,11 +16,13 @@ import java.util.UUID
 class MyMcpServerInteractor(
     private val gitServer: MyMcpGitServer,
     private val fileServer: MyMcpFileServer,
+    private val mcpCrmServer: MyMcpCrmServer,
 ) {
 
     private val servers: List<MyMcpServer> = listOf(
         gitServer,
         fileServer,
+        mcpCrmServer,
     )
 
     val localServersFlow: Flow<List<McpServer>> = combine(

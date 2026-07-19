@@ -1,0 +1,64 @@
+{
+  "users": [
+    {
+      "user_id": "usr_94821",
+      "name": "Алексей Иванов",
+      "email": "alex.ivanov@example.com",
+      "tier": "Premium",
+      "registration_date": "2024-03-15",
+      "active_device": {
+        "platform": "iOS",
+        "app_version": "4.2.1",
+        "os_version": "17.4"
+      }
+    },
+    {
+      "user_id": "usr_31045",
+      "name": "Мария Петрова",
+      "email": "masha.p@example.com",
+      "tier": "Free",
+      "registration_date": "2025-01-10",
+      "active_device": {
+        "platform": "Web/Chrome",
+        "app_version": "1.0.0",
+        "os_version": "Windows 11"
+      }
+    }
+  ],
+  "tickets": [
+    {
+      "ticket_id": "tck_1024",
+      "user_id": "usr_94821",
+      "subject": "Не работает авторизация после обновления",
+      "status": "Open",
+      "priority": "High",
+      "created_at": "2026-07-19T14:32:00Z",
+      "category": "Authentication",
+      "system_logs": "400 Bad Request",
+      "messages": [
+        {
+          "sender": "user",
+          "timestamp": "2026-07-19T14:32:00Z",
+          "text": "Привет! Общался в вашем чате и внезапно увидел сообщение 400 Bad Request"
+        }
+      ]
+    },
+    {
+      "ticket_id": "tck_1025",
+      "user_id": "usr_31045",
+      "subject": "Проблема с загрузкой аватара",
+      "status": "In Progress",
+      "priority": "Medium",
+      "created_at": "2026-07-18T09:15:00Z",
+      "category": "Profile",
+      "system_logs": "",
+      "messages": [
+        {
+          "sender": "user",
+          "timestamp": "2026-07-18T09:15:00Z",
+          "text": "Постоянно вижу ошибку: Соединение с чатом потеряно. Выполняется переподключение…"
+        }
+      ]
+    }
+  ]
+}

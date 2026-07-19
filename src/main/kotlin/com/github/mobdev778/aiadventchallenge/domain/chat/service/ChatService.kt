@@ -40,6 +40,7 @@ class ChatService(
 
     @Transactional
     suspend fun createChatWithFirstMessage(question: String): Chat {
+
         val normalizedQuestion = question.trim()
         require(normalizedQuestion.isNotEmpty()) { "Question must not be blank" }
 
@@ -52,7 +53,7 @@ class ChatService(
         )
 
         chatRepository.save(chat.toEntity())
-        postUserMessage(chat.id, null, normalizedQuestion)
+        postUserMessage(chat.id, null, "/crm $normalizedQuestion")
         return chat
     }
 

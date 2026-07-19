@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-агент для проекта AIAdventChallenge8</title>
+    <title>Твой помощник</title>
     <style>
         :root {
             color-scheme: dark;
@@ -197,20 +197,17 @@
 </head>
 <body>
 <section class="hero">
-    <h3>AI-агент</h3>
+    <h3>Твой помощник</h3>
     <p class="subtitle">
-        Привет! Задай вопрос по проекту - и я попробую ответить!<br>
-        Есть также дополнительные команды:<br>
-        <b>/help [вопрос]</b> - получить справку по проекту<br>
-        <b>/codereview [хеш коммита]</b> - выполнить код-ревью с помощью имеющихся инструментов<br>
+        Привет! Пожалуйста, введите свой user_id пользователя и я подскажу, что с вашей заявкой<br>
     </p>
     <form class="question-form" method="post" action="/chats">
         <input
                 class="question-input"
                 type="text"
                 name="question"
-                placeholder="Пример: /help есть ли в текущей ветке незакомиченные изменения?"
-                aria-label="Поле для вопроса о проекте"
+                placeholder="usr_33333"
+                aria-label="Ваш user_id"
                 required
         >
         <button class="question-button" type="submit">Задать вопрос</button>

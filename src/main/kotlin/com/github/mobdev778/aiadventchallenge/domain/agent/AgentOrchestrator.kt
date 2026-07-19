@@ -2,6 +2,8 @@ package com.github.mobdev778.aiadventchallenge.domain.agent
 
 import com.github.mobdev778.aiadventchallenge.data.chatclient.repository.ChatClientRepository
 import com.github.mobdev778.aiadventchallenge.domain.agent.agents.Agent
+import com.github.mobdev778.aiadventchallenge.domain.agent.agents.crm.context.CrmContextRegistry
+import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentContext
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentRequest
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentResponse
 import com.github.mobdev778.aiadventchallenge.domain.agent.model.AgentType
@@ -16,6 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.util.UUID
 
 @Component
 class AgentOrchestrator(
@@ -67,7 +70,7 @@ class AgentOrchestrator(
         scope.launch {
             println("Оркестратору поступил запрос: ${request.query}")
             val context = agentContextBuilder.build(request)
-            val agentType = getAgentType(request.query)
+            val agentType = getAgentType(request.chatId, request.query)
             println("Определен тип агента: $agentType")
             val pool = pools[agentType] ?: throw IllegalArgumentException("Unknown agent type")
             println("Выбран пул агентов: $pool")
@@ -80,7 +83,7 @@ class AgentOrchestrator(
      */
     fun startAgents() {
         pools.values.forEach { pool ->
-            pool.start(scope)
+            pool.start(this, scope)
         }
     }
 
@@ -93,10 +96,15 @@ class AgentOrchestrator(
         }
     }
 
-    private fun getAgentType(query: String): AgentType {
+    private fun getAgentType(
+        chatId: UUID,
+        query: String
+    ): AgentType {
         return when {
-            query.startsWith("/codereview") -> AgentType.CodeReview
-            query.startsWith("/help") -> AgentType.Help
+            query.startsWith("/codereview ") -> AgentType.CodeReview
+            query.startsWith("/help ") -> AgentType.Help
+            CrmContextRegistry.get(chatId) != null -> AgentType.CrmChat
+            query.startsWith("/crm ") -> AgentType.CrmStart
             else -> AgentType.ChatAssistant
         }
     }
